@@ -42,6 +42,7 @@ class DiabloBasic(callbacks.Plugin):
     hash_base = "aZbYcXdWeVfUgThSiRjQkPlOmNnMoLpKqJrIsHtGuFvEwDxCyBzA0123456789+/"
     classes = {
         "barbarian": "Barbarian",
+        "crusader": "Crusader",
         "demon-hunter": "Demon Hunter",
         "monk": "Monk",
         "witch-doctor": "Witch Doctor",
@@ -73,7 +74,7 @@ class DiabloBasic(callbacks.Plugin):
     def __init__(self, irc):
         super(DiabloBasic, self).__init__(irc)
 
-        self._h = httplib2.Http(".cache")
+        self._h = httplib2.Http(".cache", disable_ssl_certificate_validation=True)
 
         # Load class data
         for c in self.classes.keys():
@@ -93,11 +94,13 @@ class DiabloBasic(callbacks.Plugin):
 
         DiabloBasic._dstream_time = 0
 
+        """
         with open("/home/listen2/mumble_query", "r") as f:  #URL for the multiplay.co.uk mumble server status
             self._mumble_query = f.read().rstrip()
         resp, j = self._h.request(self._mumble_query, "GET")
         self._mumble_dom = parseString(j)
         self._mumble_time = time.time()
+        """
 
         self._chansize_time = 0
 
@@ -318,6 +321,7 @@ class DiabloBasic(callbacks.Plugin):
     def mumble(self, irc, msg, args):
         """Returns the mumble server connection information and some basic status information.
         """
+        """
         if time.time() - self._mumble_time > 600:    #ten minutes
             resp, j = self._h.request(self._mumble_query, "GET")
             self._mumble_dom = parseString(j)
@@ -325,8 +329,11 @@ class DiabloBasic(callbacks.Plugin):
 
         num_users = self._mumble_dom.getElementsByTagName("numplayers")[0].firstChild.data
         max_users = self._mumble_dom.getElementsByTagName("maxplayers")[0].firstChild.data
+        """
+        num_users = "?"
+        max_users = "?"
 
-        irc.reply("Official /r/diablo mumble server: mumble.rdiablo.com, port=2612, password=secretmana. Users: %s/%s." % (num_users, max_users), prefixNick=False)
+        irc.reply("Official /r/diablo mumble server: mumble.rdiablo.com, port=42694, password=secretmana. Users: %s/%s." % (num_users, max_users), prefixNick=False)
     mumble = wrap(mumble)
 
     def _realm_up(self, r):
