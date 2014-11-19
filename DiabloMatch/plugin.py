@@ -222,6 +222,14 @@ class DiabloMatch(callbacks.Plugin):
 
     bt = wrap(bt, [optional('something'), optional('something')])
 
+    def btag(self, irc, msg, args, arg1, arg2):
+        self.bt(irc, msg, args, arg1, arg2)
+    btag = wrap(btag, [optional('something'), optional('something')])
+
+    def battletag(self, irc, msg, args, arg1, arg2):
+        self.bt(irc, msg, args, arg1, arg2)
+    battletag = wrap(battletag, [optional('something'), optional('something')])
+
     def btinfo(self, irc, msg, args, arg1):
         """[\37user]
         Shows detailed user information. \37user may be prefixed with irc:, steam:, reddit:, email:, or bt:, and may contain the wildcard *. If \37user is not supplied, your own information will be displayed.
